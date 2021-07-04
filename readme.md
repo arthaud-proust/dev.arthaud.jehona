@@ -42,7 +42,6 @@ Exemple d'un corps json de requête :
     - `auth`: Identifiants
         - `user`: Utilisateur
         - `pass`: Mot de passe
-    - ``:
 - `mail`: Coordonnées, contenu du mail, etc
     - `from`: Nom et/ou adresse de l'envoyeur
     - `to`: Destinataire
