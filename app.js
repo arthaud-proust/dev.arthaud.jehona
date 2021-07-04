@@ -4,7 +4,7 @@ const express = require('express')
 const Mailer = require('./mailer');
 const path = require("path");
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 80
 const API_KEY = process.env.API_KEY || 'zorblug'
 
 app.set('trust proxy', true)
@@ -16,9 +16,9 @@ app.use(express.urlencoded());                      // to support URL-encoded bo
 
 app.post('/', (req, res)=>{
     if(req.body.apiKey == API_KEY) {
-        if(req.body.immediateResponse) res.status(200).send({
+        if(req.body.noStatus) res.status(200).send({
             status: 'done',
-            text: 'immediate response'
+            text: 'no status'
         });
 
         let mailer = new Mailer(
@@ -27,13 +27,13 @@ app.post('/', (req, res)=>{
         );
 
         mailer.send().then(r=>{
-            if(!req.body.immediateResponse) res.status(200).send({
+            if(!req.body.noStatus) res.status(200).send({
                 status: 'done',
                 text: 'oki doki'
             })
         })
         .catch(e=>{
-            if(!req.body.immediateResponse) res.status(400).send({
+            if(!req.body.noStatus) res.status(400).send({
                 status: 'error',
                 error: e
             })
