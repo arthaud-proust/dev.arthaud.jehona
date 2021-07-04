@@ -14,15 +14,6 @@ app.use(bodyParser.urlencoded({ extended: true })); // to support URL-encoded bo
 app.use(express.json());                            // to support JSON-encoded bodies
 app.use(express.urlencoded());                      // to support URL-encoded bodies
 
-//add the router folders
-app.use(express.static('public'));             // Store all assets, js and css files in public folder.
-
-
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views/index.html'));
-})
-
 app.post('/', (req, res)=>{
     if(req.body.apiKey == API_KEY) {
         let mailer = new Mailer(
