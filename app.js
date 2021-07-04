@@ -16,19 +16,24 @@ app.use(express.urlencoded());                      // to support URL-encoded bo
 
 app.post('/', (req, res)=>{
     if(req.body.apiKey == API_KEY) {
+        if(req.body.immediateResponse) res.status(200).send({
+            status: 'done',
+            text: 'immediate response'
+        });
+
         let mailer = new Mailer(
             req.body.params, 
             req.body.mail
         );
 
         mailer.send().then(r=>{
-            res.status(200).send({
-                status: 'ok',
+            if(!req.body.immediateResponse) res.status(200).send({
+                status: 'done',
                 text: 'oki doki'
             })
         })
         .catch(e=>{
-            res.status(400).send({
+            if(!req.body.immediateResponse) res.status(400).send({
                 status: 'error',
                 error: e
             })
