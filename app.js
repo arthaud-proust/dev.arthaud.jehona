@@ -18,13 +18,12 @@ app.post('/', (req, res)=>{
     console.log('Requete recuperee');
     if(req.body.apiKey == API_KEY) {
         console.log('Cle api correct');
-        if(req.body.noStatus) {
+        if(req.body.noStatus) { // noStatus c'eest pour heuuuu
             console.log('Pas de status. Fin operation.');
             res.status(200).send({
                 status: 'done',
                 text: 'no status'
             });
-            return
         }
 
         let mailer = new Mailer(
