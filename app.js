@@ -15,11 +15,17 @@ app.use(express.json());                            // to support JSON-encoded b
 app.use(express.urlencoded());                      // to support URL-encoded bodies
 
 app.post('/', (req, res)=>{
+    console.log('Requete recuperee');
     if(req.body.apiKey == API_KEY) {
-        if(req.body.noStatus) res.status(200).send({
-            status: 'done',
-            text: 'no status'
-        });
+        console.log('Cle api correct');
+        if(req.body.noStatus) {
+            console.log('Pas de status. Fin operation.');
+            res.status(200).send({
+                status: 'done',
+                text: 'no status'
+            });
+            return
+        }
 
         let mailer = new Mailer(
             req.body.params, 
@@ -27,20 +33,30 @@ app.post('/', (req, res)=>{
         );
 
         mailer.send().then(r=>{
-            if(!req.body.noStatus) res.status(200).send({
-                status: 'done',
-                text: 'oki doki'
-            })
+            if(!req.body.noStatus) {
+                console.log('Mail envoye. Fin operation.');
+                res.status(200).send({
+                    status: 'done',
+                    text: 'oki doki'
+                })
+                return;
+            }
         })
         .catch(e=>{
-            if(!req.body.noStatus) res.status(400).send({
-                status: 'error',
-                error: e
-            })
+            if(!req.body.noStatus) {
+                console.error(e);
+                console.log('Mail non envoye. Fin operation.');
+                res.status(400).send({
+                    status: 'error',
+                    error: e
+                })
+                return;
+            }
         })
 
         
     } else {
+        console.log('Cle api incorrecte. Fin operation.');
         res.status(400).send({
             text: 'Clé api incorrecte'
         })
